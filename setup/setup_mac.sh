@@ -21,19 +21,19 @@ else
     fi
 fi
 
-# DBeaver 설치 여부 확인 및 설치
-if brew list --cask dbeaver-community > /dev/null 2>&1; then
-    echo "DBeaver already installed"
-else
-    echo "installing DBeaver..."
+# # DBeaver 설치 여부 확인 및 설치
+# if brew list --cask dbeaver-community > /dev/null 2>&1; then
+#     echo "DBeaver already installed"
+# else
+#     echo "installing DBeaver..."
 
-    if brew install --cask dbeaver-community; then
-        echo "DBeaver install sucessed"
-    else
-        echo "failed to install DBeaver"
-        exit 1
-    fi
-fi
+#     if brew install --cask dbeaver-community; then
+#         echo "DBeaver install sucessed"
+#     else
+#         echo "failed to install DBeaver"
+#         exit 1
+#     fi
+# fi
 
 echo ""
 echo "===== 설치 완료 ====="
