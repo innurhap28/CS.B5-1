@@ -1,16 +1,36 @@
 # 관계형 데이터베이스 설계와 SQL
 
+```
+                         ┌─────────────────┐
+                         │   PROFESSORS    │
+                         ├─────────────────┤
+                         │ PK prof_id      │
+                         │    prof_name    │
+                         └────────┬────────┘
+                                  │ 1
+                                  │
+                                  │ N
+                         ┌────────▼────────┐
+                         │    SUBJECTS     │
+                         ├─────────────────┤
+                         │ PK subject_id   │
+                         │ FK prof_id      │
+                         │    subject_name │
+                         └────────┬────────┘
+                                  │ 1
+                                  │
+                                  │ N
+┌─────────────────┐      ┌────────▼────────┐
+│    STUDENTS     │      │   ENROLLMENTS   │
+├─────────────────┤      ├─────────────────┤
+│ PK student_id   │ 1  N │ PK enrollment_id│
+│    student_name │──────│ FK student_id   │
+│    phone UNIQUE  │      │ FK subject_id   │
+└─────────────────┘      │    semester     │
+                         │    grade        │
+                         └─────────────────┘
+```
 
-students 1 ───── N grades N ───── 1 subjects
-                                      │
-                                      │ 1
-                                      │
-                                      N
-                                  professers
-
-- 학생 1명 → 여러 개의 성적을 가질 수 있음
-- 과목 1개 → 여러 학생의 성적을 가질 수 있음
-- 과목 1개 → 여러 교수와 연결할 수도 있음
 
 ```
 PRAGMA foreign_keys = ON;
@@ -21,8 +41,8 @@ SQLite에서만 사용하는 설정 명령어.
 
 ---
 
-```
-DROP TABLE IF EXISTS grades;
+```sql
+DROP TABLE IF EXISTS enrollments;
 DROP TABLE IF EXISTS professors;
 DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS students;
