@@ -52,3 +52,23 @@ DROP TABLE IF EXISTS students;
 FK 관계로 인해 자식 테이블을 먼저 삭제하는 순서대로 진행. 
 
 
+``` sql
+innuendo3712@c6r8s3 CS.B5-1 % sqlite3 database/project.db
+SQLite version 3.43.2 2023-10-10 13:08:14
+Enter ".help" for usage hints.
+sqlite> .read database/schema.sql
+sqlite> .read database/insert.sql
+sqlite> .tables
+enrollments  professors   students     subjects   
+sqlite> SELECT * FROM students;
+ST001|Alice Kim|010-1234-0001|1
+ST002|Barley Lee|010-1234-0002|1
+ST003|Charlie Kim|010-1234-0003|2
+ST004|Daniel Park|010-1234-0004|2
+ST005|Echo Park|010-1234-0005|2
+ST006|Frank Lee|010-1234-0006|2
+ST007|Gabriel Lee|010-1234-0007|3
+ST008|Hopper Choi|010-1234-0008|3
+ST009|Issac Hong|010-1234-0009|3
+ST010|Jackson Kim|010-1234-0010|4
+```
