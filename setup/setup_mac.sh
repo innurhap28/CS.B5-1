@@ -21,6 +21,13 @@ else
     fi
 fi
 
+cat << EOF > ~/.sqliterc
+.headers ON
+.mode box
+.nullvalue "[NULL]"
+.timer on
+EOF
+
 # # DBeaver 설치 여부 확인 및 설치
 # if brew list --cask dbeaver-community > /dev/null 2>&1; then
 #     echo "DBeaver already installed"

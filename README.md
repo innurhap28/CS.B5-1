@@ -52,8 +52,13 @@ DROP TABLE IF EXISTS students;
 FK 관계로 인해 자식 테이블을 먼저 삭제하는 순서대로 진행. 
 
 
-``` sql
+---
+## SQLite 실행 방법
+
+``` bash
 innuendo3712@c6r8s3 CS.B5-1 % sqlite3 database/project.db
+```
+```sql
 SQLite version 3.43.2 2023-10-10 13:08:14
 Enter ".help" for usage hints.
 sqlite> .read database/schema.sql
@@ -72,3 +77,5 @@ ST008|Hopper Choi|010-1234-0008|3
 ST009|Issac Hong|010-1234-0009|3
 ST010|Jackson Kim|010-1234-0010|4
 ```
+
+프로젝트 디렉토리 내부의 `database` 안에 위치한 `project.db`를 `sqlite`로 실행시킨 후, `.read` 명령어를 이용하여 `schema.sql`과 `insert.sql`을 읽혀준다. 
