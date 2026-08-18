@@ -21,6 +21,7 @@ else
     fi
 fi
 
+# 예쁘게 예쁘게~
 cat << EOF > ~/.sqliterc
 .headers ON
 .mode box

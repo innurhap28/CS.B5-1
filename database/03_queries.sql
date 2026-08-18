@@ -57,10 +57,13 @@ ON A.prof_id = B.prof_id;
 
 
 -- ==============================
--- # Q08. JOIN 활용 쿼리
+-- # Q08. LEFT JOIN 및 COUNT를 사용한 담당 과목 수 집계
 -- ==============================
 
-
+SELECT A.prof_name AS Professor, COUNT(B.subject_id) AS 'subject in charge'
+FROM professors A LEFT OUTER JOIN subjects B
+ON A.prof_id = B.prof_id
+GROUP BY A.prof_name;
 
 
 -- ==============================
@@ -82,12 +85,13 @@ GROUP BY A.subject_name;
 
 
 -- ==============================
--- # Q11. COUNT와 GROUP BY를 사용한 수강 과목 수 집계
+-- # Q11. SUM과 GROUP BY를 활용한 학생별 총 성적 점수 조회
 -- ==============================
-SELECT A.student_name AS 이름, COUNT(B.subject_id) AS 수강과목수
-FROM students A INNER JOIN enrollments B
+SELECT A.student_name AS 이름, COUNT(B.subject_id) AS 수강과목수, SUM(B.grade) AS '총 성적'
+FROM students A LEFT OUTER JOIN enrollments B
 ON A.student_id = B.student_id
-GROUP BY A.student_name;
+GROUP BY A.student_name
+ORDER BY SUM(B.grade) DESC;
 
 
 -- ==============================

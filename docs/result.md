@@ -142,8 +142,28 @@ Run Time: real 0.000 user 0.000129 sys 0.000101
 ```
 
 ---
-## Q08. 
-
+## Q08. LEFT JOIN 및 COUNT를 사용한 담당 과목 수 집계
+```sql
+sqlite> SELECT A.prof_name AS Professor, COUNT(B.subject_id) AS 'subject in charge'
+   ...> FROM professors A LEFT OUTER JOIN subjects B
+   ...> ON A.prof_id = B.prof_id
+   ...> GROUP BY A.prof_name;
+┌───────────────┬───────────────────┐
+│   Professor   │ subject in charge │
+├───────────────┼───────────────────┤
+│ Kelvin Jung   │ 1                 │
+│ Lauren Kim    │ 2                 │
+│ Miles Morales │ 2                 │
+│ Nicholas Park │ 1                 │
+│ Oister Kim    │ 2                 │
+│ Pardon Park   │ 1                 │
+│ Quebec Kim    │ 1                 │
+│ Richard Lee   │ 0                 │
+│ Sarah Lee     │ 1                 │
+│ Ticktack Tock │ 1                 │
+└───────────────┴───────────────────┘
+Run Time: real 0.000 user 0.000280 sys 0.000196
+```
 
 ---
 ## Q09. COUNT와 GROUP BY를 사용한 수강자 수 집계
@@ -196,26 +216,28 @@ Run Time: real 0.000 user 0.000107 sys 0.000070
 ```
 
 ---
-## Q11. COUNT와 GROUP BY를 사용한 수강 과목 수 집계
+## Q11. SUM과 GROUP BY를 활용한 학생별 총 성적 점수 조회
 ```sql
-sqlite> SELECT A.student_name AS 이름, COUNT(B.subject_id) AS 수강과목수
-   ...> FROM students A INNER JOIN enrollments B
+sqlite> SELECT A.student_name AS 이름, COUNT(B.subject_id) AS 수강과목수, SUM(B.grade) AS '총 성적'
+   ...> FROM students A LEFT OUTER JOIN enrollments B
    ...> ON A.student_id = B.student_id
-   ...> GROUP BY A.student_name;
-┌─────────────┬────────────┐
-│     이름     │   수강과목수  │
-├─────────────┼────────────┤
-│ Alice Kim   │ 2          │
-│ Barley Lee  │ 2          │
-│ Daniel Park │ 2          │
-│ Echo Park   │ 1          │
-│ Frank Lee   │ 2          │
-│ Gabriel Lee │ 1          │
-│ Hopper Choi │ 2          │
-│ Issac Hong  │ 1          │
-│ Jackson Kim │ 1          │
-└─────────────┴────────────┘
-Run Time: real 0.001 user 0.000103 sys 0.000075
+   ...> GROUP BY A.student_name
+   ...> ORDER BY SUM(B.grade) DESC;
+┌─────────────┬────────────┬─────────┐
+│    이름     │ 수강과목수 │ 총 성적 │
+├─────────────┼────────────┼─────────┤
+│ Daniel Park │ 2          │ 190     │
+│ Frank Lee   │ 2          │ 180     │
+│ Alice Kim   │ 2          │ 160     │
+│ Hopper Choi │ 2          │ 140     │
+│ Barley Lee  │ 2          │ 130     │
+│ Jackson Kim │ 1          │ 100     │
+│ Gabriel Lee │ 1          │ 70      │
+│ Issac Hong  │ 0          │ [NULL]  │
+│ Echo Park   │ 0          │ [NULL]  │
+│ Charlie Kim │ 0          │ [NULL]  │
+└─────────────┴────────────┴─────────┘
+Run Time: real 0.000 user 0.000125 sys 0.000083
 ```
 
 ---
