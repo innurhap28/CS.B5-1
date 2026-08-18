@@ -1,14 +1,16 @@
 -- ==============================
 -- # Q01. WHERE를 사용한 조건 조회
 -- ==============================
-SELECT student_name, school_year FROM students
+SELECT student_name, school_year
+FROM students
 WHERE school_year = 2;
 
 
 -- ==============================
 -- # Q02. ORDER BY와 LIMIT을 사용한 상위 데이터 조회
 -- ==============================
-SELECT * FROM students
+SELECT *
+FROM students
 ORDER BY school_year DESC
 LIMIT 3;
 
@@ -16,7 +18,8 @@ LIMIT 3;
 -- ==============================
 -- # Q03. WHERE와 ORDER BY를 사용한 조건 정렬
 -- ==============================
-SELECT * FROM students
+SELECT *
+FROM students
 WHERE school_year = 2
 ORDER BY student_name DESC;
 
@@ -58,6 +61,8 @@ ON A.prof_id = B.prof_id;
 -- ==============================
 
 
+
+
 -- ==============================
 -- # Q09. COUNT와 GROUP BY를 사용한 수강자 수 집계
 -- ==============================
@@ -93,13 +98,32 @@ WHERE school_year > (SELECT AVG(school_year) FROM students);
 
 
 -- ==============================
--- # Q13.
+-- # Q13. UPDATE를 사용한 특정 데이터 수정
 -- ==============================
 
--- ==============================
--- # Q14.
--- ==============================
+SELECT * 
+FROM students
+WHERE student_id = 'ST001';
+
+UPDATE students
+SET school_year = 2
+WHERE student_id = 'ST001';
 
 -- ==============================
--- # Q15.
+-- # Q14. DELETE를 사용한 특정 데이터 삭제
 -- ==============================
+
+SELECT *
+FROM enrollments
+WHERE enroll_id = 'EN009';
+
+DELETE FROM enrollments
+WHERE enroll_id = 'EN009';
+
+
+-- ==============================
+-- # Q15. 학생 ID 조회를 위한 INDEX 생성
+-- ==============================
+
+CREATE INDEX student_enroll 
+ON enrollments(student_id, enroll_id);

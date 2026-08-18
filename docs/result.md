@@ -2,7 +2,7 @@
 
 
 ## Q01. WHERE를 사용한 조건 조회
-```
+```sql
 sqlite> SELECT student_name, school_year FROM students 
    ...> WHERE school_year = 2;
 ┌──────────────┬─────────────┐
@@ -18,7 +18,7 @@ Run Time: real 0.000 user 0.000063 sys 0.000056
 
 ---
 ## Q02. ORDER BY와 LIMIT을 사용한 상위 데이터 조회
-```
+```sql
 sqlite> SELECT * FROM students 
    ...> ORDER BY school_year DESC 
    ...> LIMIT 3;
@@ -51,7 +51,7 @@ Run Time: real 0.000 user 0.000094 sys 0.000077
 
 ---
 ## Q04. LIKE를 사용한 문자열 검색
-```
+```sql
 sqlite> SELECT * FROM students 
    ...> WHERE student_name LIKE '%Park%';
 ┌────────────┬──────────────┬───────────────┬─────────────┐
@@ -64,7 +64,7 @@ Run Time: real 0.001 user 0.000069 sys 0.000072
 ```
 ---
 ## Q05. INNER JOIN을 사용한 테이블 연결
-```
+```sql
 sqlite> SELECT A.subject_name, B.prof_name
    ...> FROM subjects A INNER JOIN professors B
    ...> ON A.prof_id = B.prof_id;
@@ -89,7 +89,7 @@ Run Time: real 0.000 user 0.000115 sys 0.000099
 
 ---
 ## Q06. 여러 테이블을 INNER JOIN으로 연결
-```
+```sql
 sqlite> SELECT A.student_name, B.subject_name, C.grade
    ...> FROM subjects B INNER JOIN enrollments C
    ...> ON B.subject_id = C.subject_id INNER JOIN students A
@@ -117,7 +117,7 @@ Run Time: real 0.001 user 0.000127 sys 0.000109
 
 ---
 ## Q07. LEFT JOIN을 사용한 전체 데이터 조회
-```
+```sql
 sqlite> SELECT A.prof_name, B.subject_name 
    ...> FROM professors A LEFT OUTER JOIN subjects B 
    ...> ON A.prof_id = B.prof_id;
@@ -142,8 +142,12 @@ Run Time: real 0.000 user 0.000129 sys 0.000101
 ```
 
 ---
-## Q08. COUNT와 GROUP BY를 사용한 수강자 수 집계
-```
+## Q08. 
+
+
+---
+## Q09. COUNT와 GROUP BY를 사용한 수강자 수 집계
+```sql
 sqlite> SELECT A.subject_name AS 과목명, COUNT(B.student_id) AS 수강자수
    ...> FROM subjects A INNER JOIN enrollments B
    ...> ON A.subject_id = B.subject_id
@@ -167,7 +171,7 @@ Run Time: real 0.000 user 0.000109 sys 0.000079
 ```
 
 ---
-## Q09. AVG와 GROUP BY를 사용한 평균 성적 집계
+## Q010. AVG와 GROUP BY를 사용한 평균 성적 집계
 ```
 sqlite> SELECT A.subject_name AS 과목명, AVG(B.grade) AS 평균성적
    ...> FROM subjects A INNER JOIN enrollments B
@@ -192,8 +196,8 @@ Run Time: real 0.000 user 0.000107 sys 0.000070
 ```
 
 ---
-## Q10. COUNT와 GROUP BY를 사용한 수강 과목 수 집계
-```
+## Q11. COUNT와 GROUP BY를 사용한 수강 과목 수 집계
+```sql
 sqlite> SELECT A.student_name AS 이름, COUNT(B.subject_id) AS 수강과목수
    ...> FROM students A INNER JOIN enrollments B
    ...> ON A.student_id = B.student_id
@@ -215,8 +219,8 @@ Run Time: real 0.001 user 0.000103 sys 0.000075
 ```
 
 ---
-## Q11. 서브쿼리를 사용한 평균값 기준 조회
-```
+## Q12. 서브쿼리를 사용한 평균값 기준 조회
+```sql
 sqlite> SELECT * FROM students
    ...> WHERE school_year > (SELECT AVG(school_year) FROM students);
 ┌────────────┬──────────────┬───────────────┬─────────────┐
@@ -228,4 +232,49 @@ sqlite> SELECT * FROM students
 │ ST010      │ Jackson Kim  │ 010-1234-0010 │ 4           │
 └────────────┴──────────────┴───────────────┴─────────────┘
 Run Time: real 0.000 user 0.000100 sys 0.000078
+```
+
+---
+## Q13. UPDATE를 사용한 특정 데이터 수정
+```sql
+sqlite> SELECT * FROM students WHERE student_id = 'ST001';
+┌────────────┬──────────────┬───────────────┬─────────────┐
+│ student_id │ student_name │     phone     │ school_year │
+├────────────┼──────────────┼───────────────┼─────────────┤
+│ ST001      │ Alice Kim    │ 010-1234-0001 │ 1           │
+└────────────┴──────────────┴───────────────┴─────────────┘
+Run Time: real 0.000 user 0.000069 sys 0.000079
+sqlite> UPDATE students SET school_year = 2 WHERE student_id = 'ST001';
+Run Time: real 0.001 user 0.000111 sys 0.000653
+sqlite> SELECT * FROM students WHERE student_id = 'ST001';
+┌────────────┬──────────────┬───────────────┬─────────────┐
+│ student_id │ student_name │     phone     │ school_year │
+├────────────┼──────────────┼───────────────┼─────────────┤
+│ ST001      │ Alice Kim    │ 010-1234-0001 │ 2           │
+└────────────┴──────────────┴───────────────┴─────────────┘
+Run Time: real 0.000 user 0.000089 sys 0.000120
+```
+
+## Q14. DELETE를 사용한 특정 데이터 삭제
+```sql
+sqlite> SELECT * FROM enrollments 
+   ...> WHERE enroll_id = 'EN009';
+┌───────────┬────────────┬────────────┬──────────┬───────┐
+│ enroll_id │ student_id │ subject_id │ semester │ grade │
+├───────────┼────────────┼────────────┼──────────┼───────┤
+│ EN009     │ ST005      │ SJ009      │ 2026-1   │ 100   │
+└───────────┴────────────┴────────────┴──────────┴───────┘
+Run Time: real 0.001 user 0.000093 sys 0.000093
+sqlite> DELETE FROM enrollments WHERE enroll_id = 'EN009';
+Run Time: real 0.001 user 0.000082 sys 0.000572
+sqlite> SELECT * FROM enrollments WHERE enroll_id = 'EN009';
+Run Time: real 0.000 user 0.000051 sys 0.000056
+```
+
+---
+## Q15. 학생 ID 조회를 위한 INDEX 생성
+```sql
+sqlite> CREATE INDEX student_enroll 
+   ...> ON enrollments(student_id, enroll_id);
+Run Time: real 0.001 user 0.000142 sys 0.000563
 ```
