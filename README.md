@@ -309,7 +309,34 @@ enrollments
 
 따라서 학생 정보와 수강 정보를 각각 관리하면서 FK를 통해 잘못된 참조를 방지할 수 있다.
 
-## 13. 프로젝트 파일 구조
+## 13. 복잡한 쿼리의 단계별 실행 과정
+```sql
+-- ==============================
+-- # Q11. SUM과 GROUP BY를 활용한 학생별 총 성적 점수 조회
+-- ==============================
+SELECT A.student_name AS 이름, COUNT(B.subject_id) AS 수강과목수, SUM(B.grade) AS '총 성적'
+FROM students A LEFT OUTER JOIN enrollments B
+ON A.student_id = B.student_id
+GROUP BY A.student_name
+ORDER BY SUM(B.grade) DESC;
+```
+### 쿼리 의도 
+
+`students` 테이블과 `enrollments` 테이블을 결합하여, 학생별 수강 과목 수와 총 성적을 조회하고 성적 순으로 정렬하는 쿼리
+
+### 상세 조인 및 연산 과정
+
+1. 테이블 결합 (LEFT OUTER JOIN) : `students` 테이블(A)을 기준으로 `enrollments` 테이블(B)을 `student_id` 기준으로 좌측 외부 조인. 이를 통해 수강 이력이 없는 학생을 누락하지 않고 전체 학생을 유지한다.
+
+2. 그룹화 (GROUP BY) : 학생의 이름(`A.student_name`)을 기준으로 데이터를 그룹화한다.
+
+3. 데이터 집계 (SELECT) : 
+- 그룹화된 학생별로 수강한 과목의 총 개수(`COUNT(B.subject_id)`)를 산출하여 '이름' 컬럼으로 출력. 
+- 학생별 성적의 총합(`SUM(B.grade)`)을 계산하여 '총 성적' 컬럼으로 명명.
+
+4. 정렬 (ORDER BY) : 집계된 총 성적(`SUM(B.grade)`)을 기준으로 내림차순(`DESC`) 정렬하여, 성적이 높은 학생부터 순서대로 출력합니다.
+
+## 14. 프로젝트 파일 구조
 
 ```text
 B5-1/
@@ -319,14 +346,18 @@ B5-1/
 │   ├── 03_queries.sql
 │   └── project.db
 │
-├── docs/
-│   ├── design.md
-│   └── result.md
+├── results/
+│   └── queries_result.txt
 │
-├── setup/
-│   ├── setup_mac.sh
-│   └── setup_win.ps1
+├── scripts/
+│   ├── setup/
+│   │   ├── setup_mac.sh
+│   │   └── setup_win.ps1
+│   ├── init.sh
+│   ├── setup_db.sh
+│   └── run_queries.sh
 │
+├── run.sh
 ├── README.md
 └── erd.drawio
 ```
@@ -337,18 +368,14 @@ B5-1/
 * `database/02_insert.sql` : 샘플 데이터 입력
 * `database/03_queries.sql` : 핵심 SQL 쿼리 15개
 * `database/project.db` : SQLite 데이터베이스 파일
-* `docs/design.md` : 데이터베이스 설계 및 선택 근거
-* `docs/result.md` : SQL 실행 결과
-* `erd.drawio` : 데이터베이스 ERD
+* `results/queries_result.txt` : SQL 실행 결과
 * `setup_mac.sh` : MAC 환경에서 SQLite 설치 및 세팅
 * `setup_win.ps1` : Window 환경에서 SQLite 설치
+* `run.sh`, `scripts` : 자동화 쉘 스크립트
 
-## 14. 실행 결과
 
-각 쿼리의 실행 결과는 `docs/result.md`에 정리하였다.
+## 15. 실행 결과
+
+각 쿼리의 실행 결과는 `results/queries_result.txt`에 정리하였다.
 
 Q01~Q15의 결과를 통해 조건 조회, 정렬, 문자열 검색, 테이블 조인, 집계, 서브쿼리, 데이터 수정·삭제, 인덱스 생성이 정상적으로 실행되는 것을 확인하였다.
-
-## 15. 참고
-
-본 프로젝트는 SQLite를 사용한 관계형 데이터베이스 실습을 목적으로 하며, 백엔드 프레임워크나 애플리케이션 서버 없이 SQLite CLI에서 SQL을 직접 실행하여 동작을 확인하였다.
